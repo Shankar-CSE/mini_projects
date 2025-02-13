@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        body {
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIak-uH-59pDPM96Pjq2B0ZLTW-AnT5PqnXQ&s");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Make the body take full viewport height */
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .box {
+            width: 100%; /* Make sure it uses the available width */
+            max-width: 600px; /* Set a maximum width for the box */
+            border: none;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Stack the input fields vertically */
+            align-items: center; /* Center content horizontally */
+            background-color: rgba(255, 255, 255, 0.8); /* Slight background for readability */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transform: translateX(10px) translateY(10px);
+            transition: all 3s ease-in-out;
+            animation: fade 3s ease;
+        }
+
+        .box input {
+            padding: 10px;
+            margin: 10px;
+            font-size: 20px;
+            background-color: blanchedalmond;
+            color: black;
+            border-radius: 20px;
+            border: 2px solid black;
+            width: 80%; /* Make the input fields take 80% of the container's width */
+        }
+
+        .box label {
+            font-size: 20px;
+            color: black;
+            text-shadow: 0 0 10px 5px black;
+            margin-top: 10px;
+        }
+
+        .box button {
+            background-color: blue;
+            color: aliceblue;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+            width: 60%; /* Make the button smaller to fit neatly */
+        }
+
+        .box button:hover {
+            background-color: rgb(21, 21, 138);
+        }
+
+        #result {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            display: none;
+        }
+
+        @keyframes fade{
+            from{
+                transform: translateX(-10px) translateY(-10px);
+            }
+            to{
+                transform: translateX(10px) translateY(10px);
+            }
+        }
+
+        
+    </style>
+
+</head>
+<body>
+    <div class="box">
+        <label for="height">HEIGHT (in cm):</label>
+        <input type="text" name="height" id="height" placeholder="Enter your height in cm......" required><br>
+        <label for="weight">WEIGHT (in kg):</label>
+        <input type="text" name="weight" id="weight" placeholder="Enter your weight in kg....." required><br>
+        <label for="gender">GENDER:</label>
+        <input type="text" name="gender" id="gender" placeholder="Enter your gender....." required><br>
+        <label for="age">AGE:</label>
+        <input type="text" name="age" id="age" placeholder="Enter your Age....." required><br>
+
+        <button class="submit" onclick="find()">CALCULATE</button>
+        <button id="result"></button>
+
+    </div>
+
+   
+    <script>
+        function find() {
+            let height = parseFloat(document.getElementById("height").value); // Convert height to a number
+            let weight = parseFloat(document.getElementById("weight").value); // Convert weight to a number
+            let result = document.getElementById("result");
+
+            // Ensure both height and weight are numbers and greater than zero
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                result.innerHTML = "Please enter valid height and weight values.";
+                result.style.backgroundColor = "lightcoral";
+                result.style.display = "block";
+                return; // Stop further execution if input is invalid
+            }
+
+            // Convert height from cm to meters
+            height = height / 100;
+
+            // BMI calculation: weight (kg) / (height (m) * height (m))
+            let bmi = weight / (height * height);
+
+            // Determine the BMI category
+            if (bmi < 18.5) {
+                result.innerHTML = `BMI: ${bmi.toFixed(2)} - UNDERWEIGHT`;
+                result.style.backgroundColor = "skyblue";
+                result.style.display = "block";
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                result.innerHTML = `BMI: ${bmi.toFixed(2)} - NORMAL WEIGHT`;
+                result.style.backgroundColor = "green";
+                result.style.display = "block";
+            } else if (bmi >= 25 && bmi < 29.9) {
+                result.innerHTML = `BMI: ${bmi.toFixed(2)} - OVERWEIGHT`;
+                result.style.backgroundColor = "yellow";
+                result.style.display = "block";
+            } else if (bmi >= 30 && bmi < 34.9) {
+                result.innerHTML = `BMI: ${bmi.toFixed(2)} - OBESE`;
+                result.style.backgroundColor = "orange";
+                result.style.display = "block";
+            } else {
+                result.innerHTML = `BMI: ${bmi.toFixed(2)} - EXTREMELY OBESE`;
+                result.style.backgroundColor = "red";
+                result.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
