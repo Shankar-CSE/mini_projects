@@ -1,0 +1,90 @@
+body{
+    text-align: center;
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: black;
+    box-shadow: 5px 5px 10px white;
+    border-radius: 50px;
+}
+.title-bar{
+   justify-content: center;
+    border-radius: 50px;
+    margin: 20px;
+    color: blue;
+    display: flex;
+    box-shadow: 5px 5px 10px rgb(29, 114, 143);
+    background-image: url(https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2020/07/shutterstock_582803470.jpg?w=750);
+    animation: zoomin 2s;
+}
+
+.logo{
+    margin: 20px;
+    margin: 20px;
+    width: 70px;
+    border-radius: 50%;
+
+}
+
+
+.list{
+    width: 350px;
+    box-shadow: 5px 5px 10px orange;
+    border-radius: 5%;
+    margin-bottom: 20px;
+    animation: fadeIn 5s , slidedown 5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomin{
+    from{
+        transform: scale(10%);
+    }
+    to{
+        transform: scale(100%);
+    }
+}
+
+@keyframes slidedown {
+    0%{
+        transform: translateX(-20px),translateY(20px);
+    }
+    50%{
+        transform: translateX(20px)translateY(-20px);
+    }
+    100%{
+        transform: translateX(0px)translateY(0px);
+    }
+}
+
+.payment{
+    justify-content: center;
+    display: flex;
+    margin: 20px;
+    box-shadow: 5px 5px 10px rgb(8, 231, 75);
+    border-radius: 50px;
+    background-color: black;
+    animation: fadeIn 5s , slidedown 5s;
+    align-content: center;
+    margin-bottom: 50px;
+}
+.paybutton
+{
+    margin: 20px;
+    margin-bottom: 0%;
+
+}
+
+.pay{
+    background-color: white;
+    box-shadow:  0 0 10px 5px white;
+    border-radius: 50%;
+}
