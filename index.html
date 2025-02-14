@@ -6,22 +6,45 @@
     <title>ALL WEB LINK</title>
 
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            box-sizing: border-box;
+        }
         body{
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            
-
+            background: black;
         }
         button{
             border-radius: 10px;
             border: 2px outset black;
             padding: 10px 40px;
+            margin: 10px;
+            animation: shadow 2s ease infinite;
+        }
+
+
+
+        @keyframes shadow{
+            0%{
+                box-shadow: 0 0 0 white;
+            }
+            50%{
+                box-shadow: 2px 2px 10px white;
+            }
+            100%{
+                box-shadow: 0 0 0 white;
+            }
         }
     </style>
 </head>
 <body>
     <button style="background-color: aqua;" onclick="window.open('BMI_calculator.html','_blank')">BMI</button>
+
+    <button style="background-color: aqua;" onclick="window.open('to_do_list.html','_blank')">To Do List</button>
 </body>
 </html>
