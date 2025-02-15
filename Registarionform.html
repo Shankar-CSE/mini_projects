@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI9654RSqM7_qbnykvfjSCSCUX16iKQmkj2g&s");
+            background-size: cover;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .box {
+            width: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(255, 253, 208, 0.7);
+            border-radius: 20px;
+            box-shadow: 2px 2px 10px black;
+            padding: 20px;
+            opacity: 0;
+            animation: slideUp 1s forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .box input {
+            padding: 6px;
+            margin: 5px;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px black;
+            transition: border-color 0.3s ease, transform 0.2s;
+        }
+
+        .box input.invalid {
+            border-color: red;
+        }
+
+        .box input.valid {
+            border-color: green;
+        }
+
+        .box input:focus {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .box button {
+            padding: 6px;
+            margin: 10px 10px;
+            width: 100px;
+            border-radius: 10px;
+            background-color: #f6c216;
+            box-shadow: 2px 2px 10px black;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+
+        .box button:hover {
+            background-color: #FFFF8F;
+            transform: scale(1.1);
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0;
+            animation: bounceIn 0.5s forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(5px);
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .valid-message {
+            color: green;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="box">
+        <h1>REGISTRATION FORM</h1>
+        <label for="fname">FIRST NAME:</label>
+        <input type="text" name="fname" id="fname">
+        <div class="error-message" id="fname-error"></div>
+
+        <label for="lname">LAST NAME:</label>
+        <input type="text" name="lname" id="lname">
+        <div class="error-message" id="lname-error"></div>
+
+        <label for="pnumber">PHONE NUMBER:</label>
+        <input type="text" name="pnumber" id="pnumber">
+        <div class="error-message" id="pnumber-error"></div>
+
+        <label for="age">AGE:</label>
+        <input type="text" name="age" id="age">
+        <div class="error-message" id="age-error"></div>
+
+        <label for="email">EMAIL:</label>
+        <input type="email" name="email" id="email">
+        <div class="error-message" id="email-error"></div>
+
+        <label for="pass">NEW PASSWORD:</label>
+        <input type="password" name="pass" id="pass">
+        <div class="error-message" id="pass-error"></div>
+
+        <label for="cpass">CONFIRM PASSWORD:</label>
+        <input type="password" name="cpass" id="cpass">
+        <div class="error-message" id="cpass-error"></div>
+
+        <button onclick="validate()">SUBMIT</button>
+    </div>
+
+    <script>
+        function validate() {
+            // Reset previous errors
+            let errorElements = document.querySelectorAll(".error-message");
+            errorElements.forEach(error => error.textContent = '');
+
+            // Reset field styles
+            let inputFields = document.querySelectorAll(".box input");
+            inputFields.forEach(field => field.classList.remove("invalid", "valid"));
+
+            let fname = document.getElementById("fname");
+            let lname = document.getElementById("lname");
+            let pnumber = document.getElementById("pnumber");
+            let age = document.getElementById("age");
+            let email = document.getElementById("email");
+            let pass = document.getElementById("pass");
+            let cpass = document.getElementById("cpass");
+
+            let numberformat = /^[0-9]{10}$/;  // Exactly 10 digits
+            let emailformat = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            let passwordformat = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+
+            // Validation logic
+            let isValid = true;
+
+            if (fname.value.length <= 3) {
+                document.getElementById("fname-error").textContent = "First name should be at least 4 letters";
+                fname.classList.add("invalid");
+                isValid = false;
+            } else {
+                fname.classList.add("valid");
+            }
+
+            if (lname.value.length <= 3) {
+                document.getElementById("lname-error").textContent = "Last name should be at least 4 letters";
+                lname.classList.add("invalid");
+                isValid = false;
+            } else {
+                lname.classList.add("valid");
+            }
+
+            if (pnumber.value.length != 10 || !numberformat.test(pnumber.value)) {
+                document.getElementById("pnumber-error").textContent = "Invalid phone number";
+                pnumber.classList.add("invalid");
+                isValid = false;
+            } else {
+                pnumber.classList.add("valid");
+            }
+
+            if (age.value <= 18 || isNaN(age.value)) {
+                document.getElementById("age-error").textContent = "You must be at least 18 years old";
+                age.classList.add("invalid");
+                isValid = false;
+            } else {
+                age.classList.add("valid");
+            }
+
+            if (!emailformat.test(email.value)) {
+                document.getElementById("email-error").textContent = "Invalid email address";
+                email.classList.add("invalid");
+                isValid = false;
+            } else {
+                email.classList.add("valid");
+            }
+
+            if (!passwordformat.test(pass.value)) {
+                document.getElementById("pass-error").textContent = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character";
+                pass.classList.add("invalid");
+                isValid = false;
+            } else {
+                pass.classList.add("valid");
+            }
+
+            if (cpass.value !== pass.value) {
+                document.getElementById("cpass-error").textContent = "Passwords do not match";
+                cpass.classList.add("invalid");
+                isValid = false;
+            } else {
+                cpass.classList.add("valid");
+            }
+
+            if (isValid) {
+                alert("Form is valid. You can submit the data.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
