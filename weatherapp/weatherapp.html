@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    
+
+<div class="card">
+    <div class="time-bar">
+        <h1>Current Time:</h1>
+        <h1 id="time">00:00:00</h1>
+    </div>
+    <div class="search">
+        <input type="text" placeholder="Enter city name" spellcheck="false" id="nameofcity">
+        <button onclick="checkWeather()" ><img src="images/search.jpg" alt="search" height="20px" width="20px"></button>
+       
+    
+    </div>
+
+    <div class="weather">
+        <img src="images/cloud-p.png"  alt="weather-icon" id="icon" class="weather-icon">
+        <h1 id="info">Normal</h1>
+        <h1 class="temp">22°C</h1>
+        <h2 class="city">India</h2>
+    </div>
+    <div class="details">
+        <div class="col">
+            <img src="images/humidity.png" alt="humidity">
+            <div>
+                 <p class="humidity">50%</p>
+                 <p>Humidity</p>
+
+            </div>
+        </div>
+    
+        <div class="col">
+            <img src="images/wind.png" alt="wind">
+            <div>
+                 <p class="wind">15 km/h</p>
+                 <p>Wind speed</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
