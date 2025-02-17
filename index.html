@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
     <title>ALL WEB LINK</title>
 
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            font-family: 'Times New Roman', Times, serif;
-            box-sizing: border-box;
-        }
-        body{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: black;
-        }
-        button{
-            border-radius: 10px;
-            border: 2px outset black;
-            padding: 10px 40px;
-            margin: 10px;
+        
+        .glowing{
+            background-color: aqua;
             animation: shadow 2s ease infinite;
-            cursor: pointer;
+        }
+       
+        .box1 button:hover{
+            transform: scale(1.2);
+            background-color: rgba(0, 255, 255, 0.877);
+            transition: all 0.5s ease-in-out;
         }
 
 
@@ -43,13 +36,20 @@
         }
     </style>
 </head>
-<body>
-    <button style="background-color: aqua;" onclick="window.open('BMI_calculator.html','_blank')">BMI</button>
+<body class="h-screen flex items-center justify-center bg-black flex-col ">
+     <h1 class="text-blue-50 mb-20 text-5xl bg-red-500 p-5 rounded-[40px]">MY MINI PROJECTS</h1>
 
-    <button style="background-color: aqua;" onclick="window.open('to_do_list.html','_blank')">To Do List</button>
+<div class="box1 flex items-center flex-col">
+    <button class="glowing w-30 h-12 m-6 cursor-pointer rounded-2xl "  onclick="window.open('BMI_calculator.html','_blank')">BMI</button>
 
-    <button style="background-color: aqua;" onclick="window.open('menucard/menucard.html','_blank')">Menucard</button>
+    <button class="glowing w-30 h-12 m-6 cursor-pointer rounded-2xl " onclick="window.open('to_do_list.html','_blank')">To Do List</button>
+
+    <button class="glowing w-30 h-12 m-6 cursor-pointer rounded-2xl " onclick="window.open('menucard/menucard.html','_blank')">Menucard</button>
     
-    <button style="background-color: aqua;" onclick="window.open('Registrationform.html','_blank')">Registration form</button>
+    <button class="glowing w-30 h-12 m-6 cursor-pointer rounded-2xl " onclick="window.open('Registrationform.html','_blank')">Registration form</button>
+   
+    <button class="glowing w-30 h-12 m-6 cursor-pointer rounded-2xl " onclick="window.open('QR_maker/qrcode.html','_blank')">QR_maker</button>
+</div>
+
 </body>
 </html>

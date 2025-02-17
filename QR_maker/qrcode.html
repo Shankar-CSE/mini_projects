@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR CODE MAKER</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Lobster&family=Playwrite+IN:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Smooch+Sans:wght@100..900&display=swap');
+        </style>
+        <style>
+           .fontxxx{
+            font-family: "Happy Monkey",serif ;
+           }
+
+            .backxxx{
+                background: linear-gradient(90deg,#BA55D3,#00fff0);
+            }
+            .btnxxx{
+                background: linear-gradient(90deg,#00308F,#BA55D3);
+            }
+            .btnxxx:hover{
+                background: linear-gradient(90deg,#BA55D3,#00fff0);
+            }
+            .aqua{
+                background-color: #00fff0;
+            }
+        </style>
+            
+</head>
+<body class=" fontxxx flex flex-col h-screen items-center justify-center bg-[url(background.png)]">
+    
+<div class="main flex flex-col justify-center items-center bg-red-500 rounded-3xl p-10 backxxx">
+    <h1 id="title" class=" p-4 rounded-3xl text-5xl text-center">QR CODE MAKER</h1>
+    <div class=" flex items-center p-7">
+    <input type="text" name="url" id="url" class="bg-gray-500 px-10 py-3 rounded-3xl btnxxx" placeholder="PASTE YOUR URL OR TEXT.....">
+    <button class="bg-gray-500 px-5 py-3 ml-9 rounded-3xl btnxxx text-white cursor-pointer" onclick="generateqr()" id="submit">SUBMIT</button>
+</div>
+    <div id="box" class=" hidden space flex items-center">
+    <div id="space" class="aqua p-20  rounded-3xl"></div>
+     
+    <div class="btns flex flex-col  ml-15">
+        <input type="text" id="color" value="color" placeholder="foreground color" class="bg-gray-500 px-5 py-3 w-20 rounded-2xl btnxxx text-white cursor-pointer">
+        <input type="text" id="size" value="size" placeholder="background color" class="bg-gray-500 px-5 py-3 my-5 w-20 rounded-2xl btnxxx text-white cursor-pointer">
+        <button id="save" class="bg-gray-500 px-5 py-3 rounded-2xl btnxxx text-white cursor-pointer" onclick="download()">save</button>
+    </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+     
+
+     function generateqr(){
+        let url = document.getElementById("url").value;
+        let space = document.getElementById("space");
+        let color = document.getElementById("color").value;
+        let size = parseInt(document.getElementById("size").value);
+        let box = document.getElementById("box");
+        space.innerHTML = "";
+         if(color=="color"){
+            color= "black";
+         }
+         if(isNaN(size)){
+            size= 100;
+         }
+         if(size>500){
+            alert("maximum size 500");
+            return;
+         }
+        if(url.trim()!==""){
+                 new QRCode(space,{
+                    text: url,
+                    height: size,
+                    width: size,
+                    colorDark: color,
+                    colorLight: "rgba(0,0,0,0)"
+                 })
+
+                 box.style.display ="flex";
+
+        }else{
+            alert("Input should nort be Empty!!!")
+        }
+     }
+
+
+     function download(){
+        let space = document.getElementById("space");
+    let canvas = document.querySelector("#space canvas");
+        if(canvas){
+            let image = canvas.toDataURL("image/png");
+            let link = document.createElement("a");
+
+            link.href = image;
+            link.download = "QR_maker.png";
+            link.click();
+        }
+     }
+</script>
+</body>
+</html>
