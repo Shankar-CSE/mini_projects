@@ -9,47 +9,47 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-    --primary-color: #4f46e5;
-    --secondary-color: #10b981;
-    --accent-color: #f59e0b;
-    --dark-bg: #1a1a2e;
-    --dark-card: #16213e;
-    --custom-bg: #f3f4f6;
-    --custom-card: #ffffff;
-    --custom-text: #1f2937;
-  }
+      --primary-color: #4f46e5;
+      --secondary-color: #10b981;
+      --accent-color: #f59e0b;
+      --dark-bg: #1a1a2e;
+      --dark-card: #16213e;
+      --custom-bg: #f3f4f6;
+      --custom-card: #ffffff;
+      --custom-text: #1f2937;
+    }
 
-  .dark {
-    --primary-color: #818cf8;
-    --secondary-color: #34d399;
-    --accent-color: #fbbf24;
-  }
+    .dark {
+      --primary-color: #818cf8;
+      --secondary-color: #34d399;
+      --accent-color: #fbbf24;
+    }
 
-  .custom {
-    --primary-color: #6366f1;
-    --secondary-color: #22c55e;
-    --accent-color: #f97316;
-  }
+    .custom {
+      --primary-color: #6366f1;
+      --secondary-color: #22c55e;
+      --accent-color: #f97316;
+    }
 
-  body.dark {
-    background-color: var(--dark-bg);
-    color: #e2e8f0;
-  }
+    body.dark {
+      background-color: var(--dark-bg);
+      color: #e2e8f0;
+    }
 
-  body.dark .card {
-    background-color: var(--dark-card);
-    color: #e2e8f0;
-  }
+    body.dark .card {
+      background-color: var(--dark-card);
+      color: #e2e8f0;
+    }
 
-  body.custom {
-    background-color: var(--custom-bg);
-    color: var(--custom-text);
-  }
+    body.custom {
+      background-color: var(--custom-bg);
+      color: var(--custom-text);
+    }
 
-  body.custom .card {
-    background-color: var(--custom-card);
-    color: var(--custom-text);
-  }
+    body.custom .card {
+      background-color: var(--custom-card);
+      color: var(--custom-text);
+    }
     
     .day-cell {
       transition: all 0.3s ease;
@@ -165,9 +165,74 @@
         opacity: 0;
       }
     }
+
+    /* New styles for notes functionality */
+    .note-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .note-content {
+      background-color: var(--dark-card);
+      padding: 2rem;
+      border-radius: 0.5rem;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .note-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      background-color: var(--dark-bg);
+      color: white;
+      border: 1px solid #4b5563;
+      border-radius: 0.25rem;
+    }
+    
+    .note-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .notes-list {
+      margin-top: 1rem;
+    }
+    
+    .note-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem;
+    }
+    
+    .note-date {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      color: var(--accent-color);
+    }
+    
+    .day-cell.has-note::after {
+      content: "📝";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      font-size: 12px;
+    }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen py-8 dark:bg-dark-bg transition-colors duration-300">
+<body class="bg-gray-100 min-h-screen py-8 dark:bg-dark-bg transition-colors duration-300 dark">
   <canvas id="particleCanvas" class="particle-canvas"></canvas>
   
   <div class="container mx-auto px-4 max-w-4xl">
@@ -300,6 +365,19 @@
     </div>
   </div>
 
+  <!-- Note Modal -->
+  <div id="noteModal" class="note-modal">
+    <div class="note-content">
+      <h3 id="noteModalTitle" class="text-xl font-bold mb-4">Daily Note</h3>
+      <textarea id="noteTextarea" class="note-textarea" placeholder="Write your note here..."></textarea>
+      <div class="note-buttons">
+        <button id="saveNoteBtn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Save Note</button>
+        <button id="cancelNoteBtn" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Cancel</button>
+      </div>
+      <div class="notes-list" id="monthNotesList"></div>
+    </div>
+  </div>
+
   <script>
     const months = [
       "January", "February", "March", "April", "May", "June",
@@ -365,7 +443,64 @@
 
     function loadData() {
       const data = localStorage.getItem(getStorageKey());
-      return data ? JSON.parse(data) : { challenge: "", days: {} };
+      return data ? JSON.parse(data) : { challenge: "", days: {}, notes: {} };
+    }
+
+    // --- Note Management Functions ---
+    let currentNoteDay = 0;
+
+    function showNoteModal(day) {
+      currentNoteDay = day;
+      const modal = document.getElementById('noteModal');
+      const title = document.getElementById('noteModalTitle');
+      const textarea = document.getElementById('noteTextarea');
+      const notesList = document.getElementById('monthNotesList');
+      
+      const data = loadData();
+      title.textContent = `Note for ${months[currentMonth]} ${day}, ${currentYear}`;
+      textarea.value = data.notes[day] || '';
+      
+      // Show all notes for the month
+      notesList.innerHTML = '<h4 class="font-bold mb-2">All Notes This Month:</h4>';
+      const hasNotes = Object.keys(data.notes).length > 0;
+      
+      if (hasNotes) {
+        Object.entries(data.notes).forEach(([noteDay, noteText]) => {
+          if (noteText.trim()) {
+            const noteItem = document.createElement('div');
+            noteItem.className = 'note-item';
+            noteItem.innerHTML = `
+              <div class="note-date">${months[currentMonth]} ${noteDay}, ${currentYear}</div>
+              <div class="note-text">${noteText}</div>
+            `;
+            notesList.appendChild(noteItem);
+          }
+        });
+      } else {
+        notesList.innerHTML += '<p>No notes yet for this month.</p>';
+      }
+      
+      modal.style.display = 'flex';
+    }
+
+    function hideNoteModal() {
+      document.getElementById('noteModal').style.display = 'none';
+    }
+
+    function saveCurrentNote() {
+      const textarea = document.getElementById('noteTextarea');
+      const noteText = textarea.value.trim();
+      const data = loadData();
+      
+      if (noteText) {
+        data.notes[currentNoteDay] = noteText;
+      } else {
+        delete data.notes[currentNoteDay];
+      }
+      
+      saveData(data);
+      hideNoteModal();
+      renderCalendar();
     }
 
     // --- Update Streak Counter ---
@@ -539,8 +674,8 @@
       // Update active month buttons
       initMonthButtons();
       
-      const { challenge, days } = loadData();
-      challengeInput.value = challenge;
+      const data = loadData();
+      challengeInput.value = data.challenge;
 
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -569,7 +704,7 @@
         const div = document.createElement("div");
         div.className = "day-cell relative p-2 rounded-lg text-center cursor-pointer h-16 flex flex-col items-center justify-center";
         
-        const status = days[day];
+        const status = data.days[day];
         if (status === "complete") div.classList.add("complete");
         else if (status === "incomplete") div.classList.add("incomplete");
         else div.classList.add("bg-gray-50", "hover:bg-gray-100", "dark:bg-gray-700", "dark:hover:bg-gray-600");
@@ -585,12 +720,18 @@
           div.classList.add("bg-gray-100", "text-gray-400", "dark:bg-gray-800", "dark:text-gray-500");
         }
         
+        // Add note indicator if day has a note
+        const hasNote = data.notes && data.notes[day] && data.notes[day].trim();
+        if (hasNote) {
+          div.classList.add("has-note");
+        }
+        
         // Add streak indicator for completed days in sequence
         let streakIndicator = '';
         if (status === "complete") {
           let streakLength = 1;
           for (let i = day - 1; i >= 1; i--) {
-            if (days[i] === "complete") streakLength++;
+            if (data.days[i] === "complete") streakLength++;
             else break;
           }
           if (streakLength > 1) {
@@ -598,52 +739,51 @@
           }
         }
         
-        div.innerHTML = `
-          <span class="text-sm font-medium">${day}</span>
-          ${status === "complete" ? 
-            '<span class="text-green-500 text-lg absolute bottom-1 right-1 animate__animated animate__bounceIn dark:text-green-400">✓</span>' : 
-            status === "incomplete" ? 
-            '<span class="text-red-500 text-lg absolute bottom-1 right-1 animate__animated animate__bounceIn dark:text-red-400">✕</span>' : ''}
-          ${streakIndicator}
-        `;
+div.innerHTML = `
+  <span class="text-sm font-medium mb-1">${day}</span>
+  <div class="flex space-x-1 mt-1">
+  <button class="text-green-500 hover:text-green-700 text-sm" title="Mark Complete">✅</button>
+  <button class="text-red-500 hover:text-red-700 text-sm" title="Mark Missed">❌</button>
+  <button class="text-yellow-500 hover:text-yellow-700 text-sm" title="Unselect">❔</button>
+</div>
+  ${streakIndicator}
+`;
+        const buttons = div.querySelectorAll("button");
+        buttons[0].onclick = (e) => {
+          e.stopPropagation();
+          const data = loadData();
+          data.days[day] = "complete";
+          saveData(data);
+          renderCalendar();
+        };
+        buttons[1].onclick = (e) => {
+          e.stopPropagation();
+          const data = loadData();
+          data.days[day] = "incomplete";
+          saveData(data);
+          renderCalendar();
+        };
+
+        buttons[2].onclick = (e) => {
+  e.stopPropagation();
+  const data = loadData();
+  delete data.days[day];
+  saveData(data);
+  renderCalendar();
+};
+
         
         div.onclick = () => {
           if (!isCurrentMonth || (isCurrentMonth && day <= today)) {
-            toggleDayStatus(day);
+            showNoteModal(day);
           }
         };
         
         calendarGrid.appendChild(div);
       }
       
-      updateProgress({ challenge, days });
+      updateProgress(data);
       updateStreak();
-    }
-
-    // --- Toggle Day Status ---
-    function toggleDayStatus(day) {
-      const data = loadData();
-      const currentStatus = data.days[day];
-      
-      if (currentStatus === "complete") {
-        data.days[day] = "incomplete";
-      } else if (currentStatus === "incomplete") {
-        delete data.days[day];
-      } else {
-        data.days[day] = "complete";
-      }
-      
-      saveData(data);
-      renderCalendar();
-      
-      // Add visual feedback
-      const dayElement = document.querySelectorAll(".day-cell")[day + firstDay - 1];
-      if (dayElement) {
-        dayElement.classList.add("animate__animated", "animate__pulse");
-        setTimeout(() => {
-          dayElement.classList.remove("animate__animated", "animate__pulse");
-        }, 1000);
-      }
     }
 
     // --- Challenge Input ---
@@ -669,11 +809,20 @@
       localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     });
 
-    // Check for saved theme preference
-    if (localStorage.getItem('theme') === 'dark' || 
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    }
+    // Set dark theme as default
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.classList.add('dark');
+
+    // Add event listeners for note modal
+    document.getElementById('saveNoteBtn').addEventListener('click', saveCurrentNote);
+    document.getElementById('cancelNoteBtn').addEventListener('click', hideNoteModal);
+
+    // Close modal when clicking outside
+    document.getElementById('noteModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('noteModal')) {
+        hideNoteModal();
+      }
+    });
 
     // --- Particle Background ---
     class ParticleBackground {
@@ -765,9 +914,6 @@
 
     // Initial load
     renderCalendar();
-
-
-    
   </script>
 </body>
 </html>
